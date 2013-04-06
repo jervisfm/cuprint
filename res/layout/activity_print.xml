@@ -9,24 +9,32 @@
     tools:context=".PrintActivity" >
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/LinearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/success_checkmark" />
 
         <TextView
             android:id="@+id/TextView03"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select File to Print"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:text="Job Sent Successfully. "
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
     </LinearLayout>
 
     <ScrollView
         android:id="@+id/ScrollView01"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout2"
-        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_below="@+id/LinearLayout1"
         android:scrollbars="vertical" >
 
         <LinearLayout
@@ -64,7 +72,9 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:text="Building"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/BlueLight"
+                android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/spinner1"
@@ -78,7 +88,9 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:text="Printer"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/BlueLight"
+                android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/Spinner01"
@@ -114,20 +126,14 @@
 
                 <requestFocus />
             </EditText>
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send Print Job"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Print" />
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Print" />
 
 </RelativeLayout>

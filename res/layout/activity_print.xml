@@ -146,19 +146,19 @@
                     </EditText>
 
                     <ImageButton
-                        android:id="@+id/ImageButton1"
+                        android:id="@+id/ImageButtonMinus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
                         android:src="@drawable/minus" />
 
                     <ImageButton
-                        android:id="@+id/ImageButton1"
+                        android:id="@+id/ImageButtonPlus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
-                        android:src="@drawable/plus"
-                         />
+                        android:src="@drawable/plus" />
+
                 </LinearLayout>
 
             </LinearLayout>

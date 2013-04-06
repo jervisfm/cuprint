@@ -17,7 +17,7 @@
             android:id="@+id/imageView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/success_checkmark" />
+            android:src="@drawable/failure_checkmark" />
 
         <TextView
             android:id="@+id/TextView03"
@@ -130,7 +130,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnPrint"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

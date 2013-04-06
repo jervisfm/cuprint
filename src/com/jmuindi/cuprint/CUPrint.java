@@ -1,11 +1,17 @@
 package com.jmuindi.cuprint;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 import android.content.Context;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 /**
  * API class that offers interaction with 
@@ -39,18 +45,52 @@ public class CUPrint {
 				out.write(buffer, 0, length);
 			}
 			out.flush();
-			out.close();
+			out.close(); 
 			in.close();
 			return true;
 		} catch (IOException e) {
 			// TODO: handle exception
 			return false;
-		}
-		
+		}		
 	}
 	
-	public static void print() {
+	/**
+	 * Do a test print of a file 
+	 */
+	public static void testPrint() {
 				
+		
+		File f = new File(getFilePath("test.pdf"));
+		System.out.println("Making ASYNC Test PRINT Request X...");		
+		AsyncHttpClient client = new AsyncHttpClient();
+		String url = "http://httpbin.org/post";
+		url = "https://printatcu.com/prints";
+		RequestParams params = new RequestParams(); 
+		params.put("print[building]", "Lerner");
+		params.put("print[printer]", "lerner200a");
+		params.put("commit", "Print");
+		params.put("print[collate]", "0");
+		params.put("print[double_sided]", "1");
+		params.put("print[copies]", "1");
+		try {
+			params.put("print[documents][]", f);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		client.post(url, params, new AsyncHttpResponseHandler() {
+			public void onSuccess(String response) {
+				System.out.println(response);
+			}
+		});						
+	}
+	
+	
+	public static void print() {
+		
+		
+		
 		
 	}
 	

@@ -37,24 +37,29 @@ public class PrintActivity extends Activity {
 	public void test() {
 		boolean success = CUPrint.loadTestFile(this);
 		// sm("Load File was Successful? " + success);
-		asyncHttpTest();
-		sm("async done ");
+		asyncHttpPrintTest();
+		sm("async done");
 	}
 	
 	
 	public void asyncHttpTest() {
-		System.out.println("Making ASYNC Request...");
+		System.out.println("Making ASYNC Request2 ...");		
 		AsyncHttpClient client = new AsyncHttpClient();
-		client.get("http://www.google.com", new AsyncHttpResponseHandler() {							
+		String url = "http://httpbin.org/get?q=search";
+		client.get(url, new AsyncHttpResponseHandler() {							
 			@Override
-		    public void onSuccess(String response) {
-		        
+		    public void onSuccess(String response) {		        
 		    	System.out.println(response);
 		    }
-		});
+		});	
 		
 		
 	}
+	public void asyncHttpPrintTest() {
+		CUPrint.loadTestFile(this);
+		CUPrint.testPrint();
+	}
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

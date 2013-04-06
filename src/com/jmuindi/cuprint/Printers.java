@@ -19,9 +19,9 @@ import com.google.gson.reflect.TypeToken;
  */
 public class Printers {
 
+	private static String printers_file = "printers.json";
 	
-	public static String readEntireStream(InputStream in) {
-		
+	private static String readEntireStream(InputStream in) {		
 		InputStreamReader isr = new InputStreamReader(in); 
 		char[] buf = new char[1024];
 		int length; 
@@ -37,26 +37,26 @@ public class Printers {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "";
-		}					
-		
+		}							
 	}
 	
-	public static void loadFile(Context ctx) throws IOException {
-		
-		InputStream in = ctx.getAssets().open("printers.json");
+	private static String loadPrinterFile(Context ctx) throws IOException {		
+		InputStream in = ctx.getAssets().open(printers_file);		
+		return readEntireStream(in);
+	}
+	
+	public static HashMap<String, ArrayList<String>> getPrintersList(Context ctx) {
+		String printersJson;
+		try {
+			printersJson = loadPrinterFile(ctx);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 		Gson gson = new Gson();
 		Type collectionType = new TypeToken<HashMap<String,ArrayList<String>>>(){}.getType();
-		String printers = readEntireStream(in);
-		HashMap<String, ArrayList<String>> hm = gson.fromJson(printers, collectionType);		
-		System.out.println("Hash Map Size == " +hm.size());
-		
-		for(String k : hm.keySet()) {
-			System.out.println(k);
-		}
-	
-		
-		
-		
-		
+		HashMap<String, ArrayList<String>> hm = gson.fromJson(printersJson, collectionType);		
+		return hm;
 	}
 }

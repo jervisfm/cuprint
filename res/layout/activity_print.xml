@@ -34,6 +34,7 @@
         android:id="@+id/ScrollView01"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@id/btnPrint"
         android:layout_below="@+id/LinearLayout1"
         android:scrollbars="vertical" >
 
@@ -122,7 +123,7 @@
                 android:id="@+id/editTextCopies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:digits="true"
+                android:inputType="number"
                 android:ems="10" >
 
                 <requestFocus />

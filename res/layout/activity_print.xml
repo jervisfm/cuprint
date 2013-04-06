@@ -8,124 +8,126 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".PrintActivity" >
 
-	<ScrollView
-	    android:id="@+id/ScrollView01"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:scrollbars="vertical" >
- 
-	    <LinearLayout
-	        android:id="@+id/linearLayout1"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentLeft="true"
-	        android:layout_alignParentTop="true"
-	        android:layout_marginLeft="5dp"
-	        android:layout_marginTop="5dp"
-	        android:orientation="vertical" >
-	
-	        <TextView
-	            android:id="@+id/textView1"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="Search Printers"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
-	
-	        <EditText
-	            android:id="@+id/editText1"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content" >
-	
-	            <requestFocus />
-	        </EditText>
-	
-	        <TextView
-	            android:id="@+id/TextView01"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:paddingTop="@dimen/activity_vertical_margin"
-	            android:text="Building"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
-	
-	        <Spinner
-	            android:id="@+id/spinner1"
-	            android:layout_width="wrap_content"
-	            android:layout_height="38dp"
-	            android:layout_marginTop="14dp" />
-	
-	        <TextView
-	            android:id="@+id/TextView02"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:paddingTop="@dimen/activity_vertical_margin"
-	            android:text="Printer"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
-	
-	        <Spinner
-	            android:id="@+id/Spinner01"
-	            android:layout_width="wrap_content"
-	            android:layout_height="38dp"
-	            android:layout_marginTop="14dp" />
-	
-	        <CheckBox
-	            android:id="@+id/checkBox1"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="Print Double Sided" />
-	
-	        <CheckBox
-	            android:id="@+id/checkBox2"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="Collate Pages" />
-	
-	        <TextView
-	            android:id="@+id/textView2"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:paddingTop="@dimen/activity_vertical_margin"
-	            android:text="Number of Copies"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
-	
-	        <EditText
-	            android:id="@+id/EditText01"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:ems="10" />
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-	        <TextView
-	            android:id="@+id/textView3"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="Select File to Print"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
+        <TextView
+            android:id="@+id/TextView03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select File to Print"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
 
-	        <LinearLayout
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content" >
+    <ScrollView
+        android:id="@+id/ScrollView01"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout2"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:scrollbars="vertical" >
 
-	            <TextView
-	                android:id="@+id/textView4"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:text="TheFileToBePrinted"
-	                android:textAppearance="?android:attr/textAppearanceMedium" />
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical" >
 
-	            <Button
-	                android:id="@+id/button1"
-	                android:layout_width="wrap_content"
-	                android:layout_height="31dp"
-	                android:text="Pick File" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-	        </LinearLayout>
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select File to Print"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-	        <Button
-	            android:id="@+id/button2"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:text="Button" />
+                <Button
+                    android:id="@+id/button1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:text="Browse" />
+            </LinearLayout>
 
-	    </LinearLayout>   
+            <TextView
+                android:id="@+id/TextView01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:text="Building"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginTop="14dp" />
+
+            <TextView
+                android:id="@+id/TextView02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:text="Printer"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <Spinner
+                android:id="@+id/Spinner01"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginTop="14dp" />
+
+            <CheckBox
+                android:id="@+id/checkBox1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Print Double Sided" />
+
+            <CheckBox
+                android:id="@+id/checkBox2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Collate Pages" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:text="Number of Copies"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <EditText
+                android:id="@+id/EditText01"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10" >
+
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send Print Job"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Print" />
+        </LinearLayout>
     </ScrollView>
- 
+
 </RelativeLayout>

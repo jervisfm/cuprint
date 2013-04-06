@@ -16,30 +16,41 @@ import android.content.Context;
  */
 public class CUPrint {
 
+	
+	public static String getFilePath(String filename) {
+		return "/data/data/com.jmuindi.cuprint/" + filename;
+	}
+	
 	/**
 	 * Loads the test.pdf packageed file
 	 * @throws IOException 
 	 */
-	public static void loadTestFile(Context ctx) throws IOException {
+	public static boolean loadTestFile(Context ctx) {
 		
-		final String fileName = "test.pdf";
-		InputStream in = ctx.getAssets().open(fileName);
-		// write out the test file. 
-		String outPath = "/data/data/com.jmuindi.cuprint/" + fileName;
-		OutputStream out = new FileOutputStream(outPath); 
-		
-		byte[] buffer = new byte[1024];
-		int length;
-		
-		while ((length = in.read(buffer)) > 0) {
-			out.write(buffer, 0, length);
+		try {
+			final String filename = "test.pdf";
+			InputStream in = ctx.getAssets().open(filename);
+			// write out the test file. 
+			String outPath = getFilePath(filename);
+			OutputStream out = new FileOutputStream(outPath);
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = in.read(buffer)) > 0) {
+				out.write(buffer, 0, length);
+			}
+			out.flush();
+			out.close();
+			in.close();
+			return true;
+		} catch (IOException e) {
+			// TODO: handle exception
+			return false;
 		}
-		out.flush();
-		out.close();
-		in.close();
+		
 	}
 	
 	public static void print() {
+				
 		
 	}
 	

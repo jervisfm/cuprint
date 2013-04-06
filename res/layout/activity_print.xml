@@ -59,7 +59,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <Button
-                    android:id="@+id/button1"
+                    android:id="@+id/btnBrowse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -77,7 +77,7 @@
                 android:textStyle="bold" />
 
             <Spinner
-                android:id="@+id/spinner1"
+                android:id="@+id/spinnerBuilding"
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"
                 android:layout_marginTop="14dp" />
@@ -93,35 +93,36 @@
                 android:textStyle="bold" />
 
             <Spinner
-                android:id="@+id/Spinner01"
+                android:id="@+id/spinnerPrinter"
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"
                 android:layout_marginTop="14dp" />
 
             <CheckBox
-                android:id="@+id/checkBox1"
+                android:id="@+id/checkBoxDoubleSided"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Print Double Sided" />
 
             <CheckBox
-                android:id="@+id/checkBox2"
+                android:id="@+id/checkBoxCollate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Collate Pages" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textViewCopies"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"                
                 android:text="Number of Copies"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <EditText
-                android:id="@+id/EditText01"
+                android:id="@+id/editTextCopies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:digits="true"
                 android:ems="10" >
 
                 <requestFocus />

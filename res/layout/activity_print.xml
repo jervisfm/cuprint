@@ -9,133 +9,140 @@
     tools:context=".PrintActivity" >
 
     <LinearLayout
-        android:id="@+id/LinearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/failure_checkmark" />
-
-        <TextView
-            android:id="@+id/TextView03"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="5dp"
-            android:text="Job Sent Successfully. "
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/ScrollView01"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/btnPrint"
-        android:layout_below="@+id/LinearLayout1"
-        android:scrollbars="vertical" >
+        android:orientation="vertical"
+        android:weightSum="1.0" >
 
         <LinearLayout
-            android:id="@+id/linearLayout1"
+            android:id="@+id/LinearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.11" >
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/failure_checkmark" />
+
+            <TextView
+                android:id="@+id/TextView03"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="Job Sent Successfully. "
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/ScrollView01"
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical" >
+            android:layout_height="0dp"            
+            android:layout_below="@+id/LinearLayout1"
+            android:scrollbars="vertical"
+            android:layout_weight="0.78" >
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:id="@+id/linearLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select File to Print"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <Button
+                        android:id="@+id/btnBrowse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:text="Browse" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/TextView01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Select File to Print"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:text="Building"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/BlueLight"
+                    android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/btnBrowse"
+                <Spinner
+                    android:id="@+id/spinnerBuilding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="14dp" />
+
+                <TextView
+                    android:id="@+id/TextView02"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/activity_horizontal_margin"
-                    android:text="Browse" />
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:text="Printer"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/BlueLight"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerPrinter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="14dp" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxDoubleSided"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Print Double Sided" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxCollate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Collate Pages" />
+
+                <TextView
+                    android:id="@+id/textViewCopies"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:text="Number of Copies"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <EditText
+                    android:id="@+id/editTextCopies"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number" >
+
+                    <requestFocus />
+                </EditText>
             </LinearLayout>
+        </ScrollView>
 
-            <TextView
-                android:id="@+id/TextView01"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:text="Building"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/BlueLight"
-                android:textStyle="bold" />
-
-            <Spinner
-                android:id="@+id/spinnerBuilding"
-                android:layout_width="wrap_content"
-                android:layout_height="38dp"
-                android:layout_marginTop="14dp" />
-
-            <TextView
-                android:id="@+id/TextView02"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:text="Printer"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/BlueLight"
-                android:textStyle="bold" />
-
-            <Spinner
-                android:id="@+id/spinnerPrinter"
-                android:layout_width="wrap_content"
-                android:layout_height="38dp"
-                android:layout_marginTop="14dp" />
-
-            <CheckBox
-                android:id="@+id/checkBoxDoubleSided"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Print Double Sided" />
-
-            <CheckBox
-                android:id="@+id/checkBoxCollate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Collate Pages" />
-
-            <TextView
-                android:id="@+id/textViewCopies"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/activity_vertical_margin"                
-                android:text="Number of Copies"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <EditText
-                android:id="@+id/editTextCopies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10" >
-
-                <requestFocus />
-            </EditText>
-        </LinearLayout>
-    </ScrollView>
-
-    <Button
-        android:id="@+id/btnPrint"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="Print" />
+        <Button
+            android:id="@+id/btnPrint"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.11"                                   	            
+            android:text="Print" />
+    </LinearLayout>
 
 </RelativeLayout>

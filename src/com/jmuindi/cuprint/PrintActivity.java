@@ -1,5 +1,7 @@
 package com.jmuindi.cuprint;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.net.http.AndroidHttpClient;
 import android.os.Bundle;
@@ -37,8 +39,9 @@ public class PrintActivity extends Activity {
 	public void test() {
 		boolean success = CUPrint.loadTestFile(this);
 		// sm("Load File was Successful? " + success);
-		asyncHttpPrintTest();
-		sm("async done");
+		//asyncHttpPrintTest();		
+		//sm("async done");
+		loadPrinters();
 	}
 	
 	
@@ -60,6 +63,15 @@ public class PrintActivity extends Activity {
 		CUPrint.testPrint();
 	}
 	
+	
+	public void loadPrinters() {
+		try {
+			Printers.loadFile(this);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

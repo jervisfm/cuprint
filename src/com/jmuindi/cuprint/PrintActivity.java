@@ -65,12 +65,8 @@ public class PrintActivity extends Activity {
 	
 	
 	public void loadPrinters() {
-		try {
-			Printers.loadFile(this);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Printers.getPrintersList(this);
+		
 	}
 	
 	@Override

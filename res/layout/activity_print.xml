@@ -18,7 +18,8 @@
             android:id="@+id/LinearLayout1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.11" >
+            android:layout_weight="0.11"
+            android:visibility="invisible" >
 
             <ImageView
                 android:id="@+id/imageView1"
@@ -39,10 +40,10 @@
         <ScrollView
             android:id="@+id/ScrollView01"
             android:layout_width="fill_parent"
-            android:layout_height="0dp"            
+            android:layout_height="0dp"
             android:layout_below="@+id/LinearLayout1"
-            android:scrollbars="vertical"
-            android:layout_weight="0.78" >
+            android:layout_weight="0.78"
+            android:scrollbars="vertical" >
 
             <LinearLayout
                 android:id="@+id/linearLayout1"
@@ -117,23 +118,46 @@
                     android:layout_height="wrap_content"
                     android:text="Collate Pages" />
 
-                <TextView
-                    android:id="@+id/textViewCopies"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/activity_vertical_margin"
-                    android:text="Number of Copies"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                <EditText
-                    android:id="@+id/editTextCopies"
+                <LinearLayout
+                    android:id="@+id/LinearLayout1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="number" >
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:weightSum="1.0" >
 
-                    <requestFocus />
-                </EditText>
+                    <TextView
+                        android:id="@+id/textViewCopies"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"                       
+                        android:text="Number of Copies"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <EditText
+                        android:id="@+id/editTextCopies"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:editable="false"
+                        android:ems="10"
+                        android:inputType="number" >                        
+                    </EditText>
+
+                    <ImageView
+                        android:id="@+id/imageViewMinus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.25"
+                        android:src="@drawable/minus" />
+
+                    <ImageView
+                        android:id="@+id/imageViewPlus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.25"
+                        android:src="@drawable/plus"
+                         />
+                </LinearLayout>
+
             </LinearLayout>
         </ScrollView>
 
@@ -141,7 +165,7 @@
             android:id="@+id/btnPrint"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.11"                                   	            
+            android:layout_weight="0.11"
             android:text="Print" />
     </LinearLayout>
 

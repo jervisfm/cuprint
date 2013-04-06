@@ -119,12 +119,4 @@ public class CUPrint {
 		});						
 	}
 	
-	
-	public static void print() {
-		
-		
-		
-		
-	}
-	
 }

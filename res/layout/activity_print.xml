@@ -136,24 +136,27 @@
                         android:id="@+id/editTextCopies"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:editable="false"
+                        android:layout_weight="0.8"                        
                         android:ems="10"
-                        android:inputType="number" >                        
+                        android:inputType="number"
+                        android:clickable="false" 
+        				android:cursorVisible="false" 
+        				android:focusable="false" 
+        				android:focusableInTouchMode="false" >                        
                     </EditText>
 
-                    <ImageView
-                        android:id="@+id/imageViewMinus"
+                    <ImageButton
+                        android:id="@+id/ImageButton1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.25"
+                        android:layout_weight="0.1"
                         android:src="@drawable/minus" />
 
-                    <ImageView
-                        android:id="@+id/imageViewPlus"
+                    <ImageButton
+                        android:id="@+id/ImageButton1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.25"
+                        android:layout_weight="0.1"
                         android:src="@drawable/plus"
                          />
                 </LinearLayout>

@@ -33,7 +33,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="5dp"
-                android:text="Job Sent Successfully."
+                android:lines="1"
+                android:ellipsize="marquee"                
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
 

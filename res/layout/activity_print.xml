@@ -15,25 +15,25 @@
         android:weightSum="1.0" >
 
         <LinearLayout
-            android:id="@+id/LinearLayout1"
+            android:id="@+id/LinearLayoutStatusBar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.11"
             android:visibility="invisible" >
 
             <ImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/imageViewStatusIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/failure_checkmark" />
 
             <TextView
-                android:id="@+id/TextView03"
+                android:id="@+id/TextViewStatusMsg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="5dp"
-                android:text="Job Sent Successfully. "
+                android:text="Job Sent Successfully."
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
 
@@ -178,6 +178,7 @@
             android:layout_height="0dp"
             android:layout_weight="0.11"
             android:enabled="false"
+            android:onClick="onClick"
             android:text="Print" />
     </LinearLayout>
 

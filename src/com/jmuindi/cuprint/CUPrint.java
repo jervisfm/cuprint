@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -23,6 +24,7 @@ import com.loopj.android.http.RequestParams;
 public class CUPrint {
 
 	public static final String PRINT_API_URL = "https://printatcu.com/prints";
+	public static final String TAG = "CUPRINT"; 			
 	public static String getFilePath(String filename) {
 		return "/data/data/com.jmuindi.cuprint/" + filename;
 	}
@@ -61,9 +63,11 @@ public class CUPrint {
 	 * @param printer - Name of Printer
 	 * @param options - Printers Options to use
 	 * @param f - File to print
-	 * @param callback - Called Upon when print job is done. 
+	 * @param callback - It calls a done Method 
 	 */
-	public static void print(String building, String printer, PrinterOptions options, File f, Context callback) {		
+	public static void print(String building, String printer, 
+							 PrinterOptions options, File f,
+							 final PrintActivity callback) {		
 		AsyncHttpClient client = new AsyncHttpClient();				
 		RequestParams params = new RequestParams(); 
 		params.put("print[building]", building);
@@ -80,9 +84,15 @@ public class CUPrint {
 		}
 		
 		client.post(PRINT_API_URL, params, new AsyncHttpResponseHandler() {
+			
+			public void onFailure(Throwable e, String response) {
+				Log.e(TAG, "Print job failed to be sent"); 
+				callback.done(false);
+			}
+			
 			public void onSuccess(String response) {
-				System.out.println("Print Succeeded"); 
-				// callback.done(); 
+				Log.d(TAG, "Print job sent successfully"); 				
+				callback.done(true); 
 			}
 		});			
 	}

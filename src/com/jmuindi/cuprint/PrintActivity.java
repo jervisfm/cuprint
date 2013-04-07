@@ -2,10 +2,14 @@ package com.jmuindi.cuprint;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,8 +21,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,15 +34,18 @@ import com.ipaulpro.afilechooser.utils.FileUtils;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-public class PrintActivity extends Activity {
+public class PrintActivity extends Activity  implements PrintCallBack{
 
-	
-	public static final String TAG = "PrintActivity";
 
 	// Request Code for On Activity Result 
-	private static final int ACTIVITY_REQUEST_CODE = 6387;
+	private static final int ACTIVITY_REQUEST_CODE = 6387;	
+	public static final String TAG = "PrintActivity";
+	
+	private Dialog progressDialog = null;
+
 	public HashMap<String, ArrayList<String>> printMap = null;
 	public File file = null; 
+	
 	
 	public void d(String msg) {
 		Log.d(TAG,msg);
@@ -196,10 +206,44 @@ public class PrintActivity extends Activity {
 			showFileBrowser(); 
 			break;
 		}
+		
+		case R.id.btnPrint: {
+			onClickButtonPrint(); 
+		}
 		default:
 			break;
 		}
 		
+	}
+
+	private PrinterOptions currentPrinterOptions() {
+		CheckBox doubleSided = (CheckBox) findViewById(R.id.checkBoxDoubleSided);
+		CheckBox collate = (CheckBox) findViewById(R.id.checkBoxCollate); 
+		EditText copies = (EditText) findViewById(R.id.editTextCopies);		
+		int numCopies = Integer.parseInt(copies.getText().toString());
+		return new PrinterOptions(doubleSided.isChecked(), collate.isChecked(), numCopies); 
+	}
+	
+	private void onClickButtonPrint() {
+
+		if (!Util.isNetworkAvailable(this)) {
+			Log.e(TAG, "Cannot print because there is not active internet connection");
+			sm("An active Internet connection is required to print. Please ensure " +
+			   "you're connected to a netowrk and try again");
+			return; 
+		}
+		
+		// Get Selected Printer
+		Spinner sPrinter = (Spinner) findViewById(R.id.spinnerPrinter); 
+		String printer  = (String) sPrinter.getSelectedItem();
+		
+		Spinner sBuilding = (Spinner) findViewById(R.id.spinnerBuilding); 
+		String building = (String)  sBuilding.getSelectedItem(); 
+		
+		PrinterOptions options = currentPrinterOptions(); 
+		
+		// Send the Printer Job		
+		CUPrint.print(building, printer, options, this.file, this);
 	}
 	
 	@Override
@@ -244,9 +288,7 @@ public class PrintActivity extends Activity {
 		    public void onSuccess(String response) {		        
 		    	System.out.println(response);
 		    }
-		});	
-		
-		
+		});					
 	}
 	public void asyncHttpPrintTest() {
 		CUPrint.loadTestFile(this);
@@ -264,6 +306,61 @@ public class PrintActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.print, menu);
 		return true;
+	}
+
+	private void initProgressDialog() {
+		if (this.progressDialog == null) {
+			ProgressDialog dialog = new ProgressDialog(this);			
+			dialog.setMessage("Sending Print Job ...");
+			dialog.setIndeterminate(true);
+			dialog.setCancelable(false);
+			this.progressDialog = dialog;
+		}
+	}
+
+	private void updateStatusBar(int imageId, String status) {
+		ImageView iv = (ImageView) findViewById(R.id.imageViewStatusIcon);
+		TextView tv = (TextView) findViewById(R.id.TextViewStatusMsg);
+		
+		// Update Image 
+		iv.setImageResource(imageId);
+		
+		// update status message
+		Calendar cal = Calendar.getInstance();
+		String time = cal.toString();		
+		String msg = String.format("%s - %s", time, status);
+		tv.setText(msg);
+	}
+	
+	private void printJobSuccess() {
+		int imageId = R.drawable.success_checkmark;
+		String status = "Job Sent Successfully";
+		updateStatusBar(imageId, status);
+	}
+	
+	private void printJobFailure() {
+		int imageId = R.drawable.failure_checkmark; 
+		String status = "Job Failed to be sent" ;
+		updateStatusBar(imageId, status);
+	}
+			
+	
+	@Override
+	public void done(boolean success) {				 				
+		if (success) {
+			printJobSuccess();
+		} else {
+			printJobFailure(); 
+		}
+		this.progressDialog.dismiss(); 
+		
+		// Enable the status message bar if needed
+		LinearLayout ll = (LinearLayout) findViewById(
+											R.id.LinearLayoutStatusBar);
+		if (ll.getVisibility() != View.VISIBLE) {
+			ll.setVisibility(View.VISIBLE);
+		}
+		
 	}
 
 }

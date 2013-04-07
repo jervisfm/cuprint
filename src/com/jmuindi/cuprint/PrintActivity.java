@@ -70,8 +70,7 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 	    String type = intent.getType();
 	    
 	    
-	    if ((Intent.ACTION_VIEW.equals(action) || 
-	    		Intent.ACTION_SEND.equals(action) ) && type != null) {
+	    if (Intent.ACTION_VIEW.equals(action)  && type != null) {
 	    	// Handle Intent and get the data as a file. 
 	    	Uri uri = intent.getData();
 	    	try {

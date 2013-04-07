@@ -1,12 +1,12 @@
 package com.jmuindi.cuprint;
 
-import java.io.IOException;
-
 import android.app.Activity;
-import android.net.http.AndroidHttpClient;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -35,6 +35,35 @@ public class PrintActivity extends Activity {
 		test(); 
 	}
 
+	
+	public void onClick(View v) {
+		
+		int id = v.getId(); 
+		switch (id) {
+		case R.id.ImageButtonMinus: {			
+			ImageButton ib = (ImageButton) v;
+			EditText et = (EditText) findViewById(R.id.editTextCopies);
+			int current = Integer.parseInt(et.getText().toString());
+			if (current > 1) {
+				String newValue = String.valueOf(current - 1);
+				et.setText(newValue);				
+			}						
+			break;
+		}
+		case R.id.ImageButtonPlus: {			
+			ImageButton ib = (ImageButton) v; 
+			EditText et = (EditText) findViewById(R.id.editTextCopies);
+			int current = Integer.parseInt(et.getText().toString());
+			String newValue = String.valueOf(current + 1); 
+			et.setText(newValue); 
+			break;
+		}
+
+		default:
+			break;
+		}
+		
+	}
 	
 	public void test() {
 		boolean success = CUPrint.loadTestFile(this);

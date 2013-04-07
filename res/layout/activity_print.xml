@@ -142,7 +142,8 @@
                         android:clickable="false" 
         				android:cursorVisible="false" 
         				android:focusable="false" 
-        				android:focusableInTouchMode="false" >                        
+        				android:focusableInTouchMode="false"
+        				android:text="1" >                        
                     </EditText>
 
                     <ImageButton
@@ -150,6 +151,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
+                        android:onClick="onClick"
                         android:src="@drawable/minus" />
 
                     <ImageButton
@@ -157,7 +159,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
-                        android:src="@drawable/plus" />
+                        android:src="@drawable/plus" 
+                        android:onClick="onClick"/>
 
                 </LinearLayout>
 

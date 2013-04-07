@@ -1,11 +1,14 @@
 package com.jmuindi.cuprint;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,11 +16,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ipaulpro.afilechooser.utils.FileUtils;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -25,7 +31,11 @@ public class PrintActivity extends Activity {
 
 	
 	public static final String TAG = "PrintActivity";
+
+	// Request Code for On Activity Result 
+	private static final int ACTIVITY_REQUEST_CODE = 6387;
 	public HashMap<String, ArrayList<String>> printMap = null;
+	public File file = null; 
 	
 	public void d(String msg) {
 		Log.d(TAG,msg);
@@ -63,6 +73,48 @@ public class PrintActivity extends Activity {
 	}
 		
 	
+	private boolean havePrintableFile() {
+		if (this.file == null) {
+			return false;
+		} else if (!this.file.exists()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	private void setFileToPrint(File f, String uriName) {
+		if (f == null) {
+			Log.w(TAG, "Setting null file to Print");
+		} else if (!f.exists()) {
+			Log.w(TAG, "Setting non-existent file to Print");
+		} else {
+			Log.v(TAG, "Setting this file for print: " + f.getAbsolutePath());
+			this.file = f; 
+			
+			// Update selected file in UI 
+			String fname = "";
+			if (uriName.trim().length() > 0) {
+				fname = uriName;
+				Log.d(TAG, "Using URI Name: " + uriName);
+			} else if (f.getName().trim().length() > 0) {
+				Log.d(TAG, "Using FName: " + f.getName());
+				fname = f.getName(); 
+			} else {
+				Log.e(TAG, "File name not available");
+			}
+			
+			TextView tv = (TextView) findViewById(R.id.textViewFilename);
+			tv.setText(fname); 
+			
+			// Enable Print Button
+			Button btn = (Button)  findViewById(R.id.btnPrint); 
+			if (!btn.isEnabled()) {
+				btn.setEnabled(true);
+			}
+		}
+	}
+	
 	private void initBuildingSpinner() {
 		
 		// Initialize the Print Map if Needed
@@ -99,10 +151,20 @@ public class PrintActivity extends Activity {
 			public void onNothingSelected(AdapterView<?> parent) {				
 				// Do nothing
 			}			
-		});
-		
-		
-		
+		});						
+	}
+	
+	private void showFileBrowser() {
+		// Use the GET_CONTENT intent from the utility class
+		Intent target = FileUtils.createGetContentIntent();
+		// Create the chooser Intent
+		Intent intent = Intent.createChooser(
+				target, "Select File to Print");
+		try {
+			startActivityForResult(intent, ACTIVITY_REQUEST_CODE);
+		} catch (ActivityNotFoundException e) {
+			// The reason for the existence of aFileChooser
+		}				
 	}
 	
 	private void updatePrinterSpinner(String building) {		
@@ -130,10 +192,37 @@ public class PrintActivity extends Activity {
 			break;
 		}
 
+		case R.id.btnBrowse: {
+			showFileBrowser(); 
+			break;
+		}
 		default:
 			break;
 		}
 		
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case ACTIVITY_REQUEST_CODE:	
+			// If the file selection was successful
+			if (resultCode == RESULT_OK) {		
+				if (data != null) {
+					// Get the URI of the selected file
+					final Uri uri = data.getData();
+					try {
+						// Create a file instance from the URI
+						final File file = FileUtils.getFile(uri);						
+						setFileToPrint(file, uri.getLastPathSegment());						
+					} catch (Exception e) {
+						Log.e("FileSelectorTestActivity", "File select error", e);
+					}
+				}
+			} 
+			break;
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
 	public void test() {

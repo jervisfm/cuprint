@@ -1,6 +1,7 @@
 package com.jmuindi.cuprint;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class PrintActivity extends Activity {
 		
 		// Initialize the Print Map if Needed
 		if (printMap == null) {
-			printMap = Printers.getPrintersList(this);
+			printMap = Printers.getPrintersList(this);			
 		}
 		
 		Spinner spinner = (Spinner) findViewById(R.id.spinnerBuilding);
@@ -74,6 +75,7 @@ public class PrintActivity extends Activity {
 		for (String building : printMap.keySet()) {
 			buildings.add(building);
 		}
+		Collections.sort(buildings);
 		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 			android.R.layout.simple_spinner_item, buildings);

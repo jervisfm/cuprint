@@ -44,7 +44,7 @@ public class Printers {
 		InputStream in = ctx.getAssets().open(printers_file);		
 		return readEntireStream(in);
 	}
-	
+			
 	public static HashMap<String, ArrayList<String>> getPrintersList(Context ctx) {
 		String printersJson;
 		try {

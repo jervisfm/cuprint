@@ -36,26 +36,34 @@ public class PrintActivity extends Activity {
 	}
 
 	
+	private void onClickImageButtonMinus(ImageButton ib) {
+		EditText et = (EditText) findViewById(R.id.editTextCopies);
+		int current = Integer.parseInt(et.getText().toString());
+		if (current > 1) {
+			String newValue = String.valueOf(current - 1);
+			et.setText(newValue);				
+		}
+	}
+	
+	private void onClickImageButtonPlus(ImageButton ib) {
+		EditText et = (EditText) findViewById(R.id.editTextCopies);
+		int current = Integer.parseInt(et.getText().toString());
+		String newValue = String.valueOf(current + 1); 
+		et.setText(newValue); 
+	}
+	
 	public void onClick(View v) {
 		
 		int id = v.getId(); 
 		switch (id) {
 		case R.id.ImageButtonMinus: {			
 			ImageButton ib = (ImageButton) v;
-			EditText et = (EditText) findViewById(R.id.editTextCopies);
-			int current = Integer.parseInt(et.getText().toString());
-			if (current > 1) {
-				String newValue = String.valueOf(current - 1);
-				et.setText(newValue);				
-			}						
+			onClickImageButtonMinus(ib);
 			break;
 		}
 		case R.id.ImageButtonPlus: {			
 			ImageButton ib = (ImageButton) v; 
-			EditText et = (EditText) findViewById(R.id.editTextCopies);
-			int current = Integer.parseInt(et.getText().toString());
-			String newValue = String.valueOf(current + 1); 
-			et.setText(newValue); 
+			onClickImageButtonPlus(ib);
 			break;
 		}
 

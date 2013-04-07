@@ -242,6 +242,9 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		
 		PrinterOptions options = currentPrinterOptions(); 
 		
+		// show progress dialog 
+		this.progressDialog.show(); 		
+
 		// Send the Printer Job		
 		CUPrint.print(building, printer, options, this.file, this);
 	}

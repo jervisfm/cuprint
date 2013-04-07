@@ -86,7 +86,7 @@
 
                 <Spinner
                     android:id="@+id/spinnerBuilding"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="38dp"
                     android:layout_marginTop="14dp" />
 
@@ -102,7 +102,7 @@
 
                 <Spinner
                     android:id="@+id/spinnerPrinter"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="38dp"
                     android:layout_marginTop="14dp" />
 

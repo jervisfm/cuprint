@@ -64,6 +64,28 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		initBuildingSpinner();
 		initProgressDialog();		
 		
+		// Get intent, action and MIME type
+	    Intent intent = getIntent();
+	    String action = intent.getAction();
+	    String type = intent.getType();
+	    
+	    
+	    if ((Intent.ACTION_VIEW.equals(action) || 
+	    		Intent.ACTION_SEND.equals(action) ) && type != null) {
+	    	// Handle Intent and get the data as a file. 
+	    	Uri uri = intent.getData();
+	    	try {
+				// Create a file instance from the URI
+				File file = FileUtils.getFile(uri);	
+				Log.d(TAG,"Is Uri Null? " + String.valueOf(uri == null));
+				setFileToPrint(file, uri.getLastPathSegment());
+			} catch (Exception e) {
+				Log.e("PrintActivity", "File Loading error when " +
+										"prelading it from an intent", e);
+				sm("Autoloading Failed, Please Manually Select File to Print");
+			}
+	    } 
+		
 		// Restore prior state if present
 		if (savedInstanceState != null ) {
 			loadSavedState(savedInstanceState);
@@ -259,7 +281,7 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		if (f == null) {
 			Log.w(TAG, "Setting null file to Print");
 		} else if (!f.exists()) {
-			Log.w(TAG, "Setting non-existent file to Print");
+			Log.w(TAG, "Given non-existent file to Print - ignoring...");
 		} else {
 			Log.v(TAG, "Setting this file for print: " + f.getAbsolutePath());
 			this.file = f; 
@@ -275,7 +297,7 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 			} else {
 				Log.e(TAG, "File name not available");
 			}
-			
+			Log.e(TAG, "File name was finally set to " + fname);
 			TextView tv = (TextView) findViewById(R.id.textViewFilename);
 			tv.setText(fname); 
 			
@@ -438,7 +460,7 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 						final File file = FileUtils.getFile(uri);						
 						setFileToPrint(file, uri.getLastPathSegment());						
 					} catch (Exception e) {
-						Log.e("FileSelectorTestActivity", "File select error", e);
+						Log.e("PrintActivity", "File select error", e);
 					}
 				}
 			} 

@@ -81,6 +81,7 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		String statusMessage= getCurrentStatusMsg();
 		PrinterOptions options = getCurrentPrinterOptions();
 		
+		boolean statusVisible = isStatusBarVisible(); 
 		boolean collate = options.collate; 
 		boolean doubleSided = options.double_sided;
 		int copies = options.copies;
@@ -93,10 +94,13 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		outState.putString("filename", filename);
 		outState.putSerializable("file", this.file);
 		outState.putString("statusmessage", statusMessage);
-		
+		outState.putBoolean("statusbarvisible", statusVisible);
 	}
 	
-	
+	private boolean isStatusBarVisible() {
+		LinearLayout ll = (LinearLayout) findViewById(R.id.LinearLayoutStatusBar);
+		return ll.getVisibility() == View.VISIBLE ;
+	}
 	
 	private String getCurrentStatusMsg() {
 		TextView tv = (TextView) findViewById(R.id.TextViewStatusMsg);
@@ -136,6 +140,7 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		Spinner sBuilding = (Spinner) findViewById(R.id.spinnerBuilding);
 		
 		int buildingIndex = getBuildingIndex(building);
+		Log.v(TAG, "buidling Index == " + buildingIndex);
 		int printerIndex = getPrinterIndex(printer);
 		
 		sPrinter.setSelection(printerIndex); 
@@ -158,18 +163,26 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		tv.setText(filename); 
 	}
 	
-	private void loadStatusMessage(String statusMessage) {
+	private void loadStatusMessage(String statusMessage, boolean statusVisible) {
 		if (statusMessage != null) {
 			if (statusMessage.toLowerCase().contains("success")) {
 				updateStatusBar(R.drawable.success_checkmark, SUCCESS_STATUS);				
 			} else { // error
+				// Note: this also catches the first state app is in on startup 
+				// when it's empty. 
 				updateStatusBar(R.drawable.failure_checkmark, ERROR_STATUS);
 			}
-			showStatusBar();
+			if (statusVisible) {
+				showStatusBar();
+			} else {
+				hideStatusBar(); 
+			}
 		} else {
 			hideStatusBar();
 		}
 	}
+	
+	
 	
 	private void loadSavedState(Bundle in) {
 		if (in != null) {
@@ -178,15 +191,24 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 			String filename = in.getString("filename");
 			boolean collate = in.getBoolean("collate");
 			boolean doubleSided = in.getBoolean("doublesided"); 
+			boolean statusBarVisible = in.getBoolean("statusbarvisible");
 			int copies = in.getInt("copies"); 
 			File file = (File) in.getSerializable("file");
 			String statusMessage = (String) in.getString("statusmessage");
+			
+			Log.d(TAG, "building = " + building);
+			Log.d(TAG, "printer = " + printer);
+			Log.d(TAG, "filename = " + filename);
+			Log.d(TAG, "collate ?  " + collate);
+			Log.d(TAG, "doulbeseid= " + doubleSided);
+			Log.d(TAG, "copies = " + copies);
+			
 			
 			this.file = file;
 			loadPrinter(building, printer); 
 			loadPrinterOptions(doubleSided, collate, copies); 
 			loadFilename(filename);
-			loadStatusMessage(statusMessage);
+			loadStatusMessage(statusMessage, statusBarVisible);
 			
 		}
 	}
@@ -298,7 +320,10 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 			public void onNothingSelected(AdapterView<?> parent) {				
 				// Do nothing
 			}			
-		});						
+		});
+		
+		// Initialize Printer Spinner. 
+		updatePrinterSpinner(buildings.get(0));
 	}
 	
 	private void showFileBrowser() {

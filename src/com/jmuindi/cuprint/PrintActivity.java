@@ -41,7 +41,8 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 	// Request Code for On Activity Result 
 	private static final int ACTIVITY_REQUEST_CODE = 6387;	
 	public static final String TAG = "PrintActivity";
-	
+	public static final String SUCCESS_STATUS = "Job Sent Successfully";
+	public static final String ERROR_STATUS = "Job Failed to be sent";
 	private Dialog progressDialog = null;
 
 	public HashMap<String, ArrayList<String>> printMap = null;
@@ -62,7 +63,12 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		setContentView(R.layout.activity_print);
 		initBuildingSpinner();
 		initProgressDialog();		
-			
+		
+		// Restore prior state if present
+		if (savedInstanceState != null ) {
+			loadSavedState(savedInstanceState);
+		}
+		
 	}
 
 	@Override
@@ -71,7 +77,8 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		
 		String building = getSelectedBuilding(); 
 		String printer = getSelectedPrinter(); 
-		String filename = getCurrentFilename(); 
+		String filename = getCurrentFilename();
+		String statusMessage= getCurrentStatusMsg();
 		PrinterOptions options = getCurrentPrinterOptions();
 		
 		boolean collate = options.collate; 
@@ -85,7 +92,15 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		outState.putInt("copies", copies); 
 		outState.putString("filename", filename);
 		outState.putSerializable("file", this.file);
+		outState.putString("statusmessage", statusMessage);
 		
+	}
+	
+	
+	
+	private String getCurrentStatusMsg() {
+		TextView tv = (TextView) findViewById(R.id.TextViewStatusMsg);
+		return tv.getText().toString();
 	}
 	
 	
@@ -143,6 +158,19 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		tv.setText(filename); 
 	}
 	
+	private void loadStatusMessage(String statusMessage) {
+		if (statusMessage != null) {
+			if (statusMessage.toLowerCase().contains("success")) {
+				updateStatusBar(R.drawable.success_checkmark, SUCCESS_STATUS);				
+			} else { // error
+				updateStatusBar(R.drawable.failure_checkmark, ERROR_STATUS);
+			}
+			showStatusBar();
+		} else {
+			hideStatusBar();
+		}
+	}
+	
 	private void loadSavedState(Bundle in) {
 		if (in != null) {
 			String building = in.getString("building"); 
@@ -152,11 +180,14 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 			boolean doubleSided = in.getBoolean("doublesided"); 
 			int copies = in.getInt("copies"); 
 			File file = (File) in.getSerializable("file");
-
+			String statusMessage = (String) in.getString("statusmessage");
+			
 			this.file = file;
 			loadPrinter(building, printer); 
 			loadPrinterOptions(doubleSided, collate, copies); 
 			loadFilename(filename);
+			loadStatusMessage(statusMessage);
+			
 		}
 	}
 
@@ -451,16 +482,32 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 	
 	private void printJobSuccess() {
 		int imageId = R.drawable.success_checkmark;
-		String status = "Job Sent Successfully";
+		String status = SUCCESS_STATUS;
 		updateStatusBar(imageId, status);
 	}
 	
 	private void printJobFailure() {
 		int imageId = R.drawable.failure_checkmark; 
-		String status = "Job Failed to be sent" ;
+		String status = ERROR_STATUS;
 		updateStatusBar(imageId, status);
 	}
 			
+	
+	private void showStatusBar() {
+		// Enable the status message bar if needed
+		LinearLayout ll = (LinearLayout) findViewById(R.id.LinearLayoutStatusBar);
+		if (ll.getVisibility() != View.VISIBLE) {
+			ll.setVisibility(View.VISIBLE);
+		}
+	}
+	
+	private void hideStatusBar() {
+		// Hide the status message bar if needed
+		LinearLayout ll = (LinearLayout) findViewById(R.id.LinearLayoutStatusBar);
+		if (ll.getVisibility() == View.VISIBLE) {
+			ll.setVisibility(View.INVISIBLE);
+		}
+	}
 	
 	@Override
 	public void done(boolean success) {				 				
@@ -470,13 +517,8 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 			printJobFailure(); 
 		}
 		this.progressDialog.dismiss(); 
+		showStatusBar(); 
 		
-		// Enable the status message bar if needed
-		LinearLayout ll = (LinearLayout) findViewById(
-											R.id.LinearLayoutStatusBar);
-		if (ll.getVisibility() != View.VISIBLE) {
-			ll.setVisibility(View.VISIBLE);
-		}
 		
 	}
 

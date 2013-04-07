@@ -208,8 +208,8 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 			loadPrinter(building, printer); 
 			loadPrinterOptions(doubleSided, collate, copies); 
 			loadFilename(filename);
-			loadStatusMessage(statusMessage, statusBarVisible);
-			
+			loadStatusMessage(statusMessage, statusBarVisible);			
+			enablePrintButton(); 
 		}
 	}
 

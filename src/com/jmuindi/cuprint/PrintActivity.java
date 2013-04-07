@@ -1,6 +1,7 @@
 package com.jmuindi.cuprint;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -57,14 +58,121 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_print);		
-		
-		d("test debug msg");
-		sm("Hello world");
-		test(); 
+		super.onCreate(savedInstanceState);					
+		initBuildingSpinner();
+		initProgressDialog();		
+		setContentView(R.layout.activity_print);	
 	}
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {		
+		super.onSaveInstanceState(outState);
+		
+		String building = getSelectedBuilding(); 
+		String printer = getSelectedPrinter(); 
+		String filename = getCurrentFilename(); 
+		PrinterOptions options = getCurrentPrinterOptions();
+		
+		boolean collate = options.collate; 
+		boolean doubleSided = options.double_sided;
+		int copies = options.copies;
+		
+		outState.putString("building", building);
+		outState.putString("printer", printer);
+		outState.putBoolean("collate", collate);
+		outState.putBoolean("doublesided", doubleSided);
+		outState.putInt("copies", copies); 
+		outState.putString("filename", filename);
+		outState.putSerializable("file", this.file);
+		
+	}
+	
+	
+	private int getPrinterIndex(String printer) {
+		return getItemIndexInSpinner(R.id.spinnerPrinter, printer);
+	}
+	
+	private int getBuildingIndex(String building) {
+		return getItemIndexInSpinner(R.id.spinnerBuilding, building);
+	}
+	/**
+	 * Returns index in which given item is in the spinner. 
+	 * If item is not found, -1 is returned. 
+	 * @param item - item to look for.
+	 * @param spinnerId - Resource Id of the Spinner 
+	 * @return 
+	 */
+	private int getItemIndexInSpinner(int spinnerId, String item) {
+		Spinner spinner = (Spinner) findViewById(spinnerId); 
+		int count = spinner.getAdapter().getCount();
+		for (int i = 0; i < count; ++i) {
+			String s = (String) spinner.getItemAtPosition(i); 
+			if (s.equals(item)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	private void loadPrinter(String building, String printer) {
+		
+		Spinner sPrinter = (Spinner) findViewById(R.id.spinnerPrinter); 
+		Spinner sBuilding = (Spinner) findViewById(R.id.spinnerBuilding);
+		
+		int buildingIndex = getBuildingIndex(building);
+		int printerIndex = getPrinterIndex(printer);
+		
+		sPrinter.setSelection(printerIndex); 
+		sBuilding.setSelection(buildingIndex);
+	}
+	
+	private void loadPrinterOptions(boolean doubleSided, boolean collate, 
+								    int copies) {
+		CheckBox chkDoubleSided = (CheckBox) findViewById(R.id.checkBoxDoubleSided);
+		CheckBox chkCollate = (CheckBox) findViewById(R.id.checkBoxCollate); 
+		EditText etCopies = (EditText) findViewById(R.id.editTextCopies);		
+		
+		chkDoubleSided.setChecked(doubleSided);
+		chkCollate.setChecked(collate); 
+		etCopies.setText(String.valueOf(copies));
+	}
+	
+	private void loadFilename(String filename) {
+		TextView tv = (TextView) findViewById(R.id.textViewFilename); 
+		tv.setText(filename); 
+	}
+	
+	private void loadSavedState(Bundle in) {
+		if (in != null) {
+			String building = in.getString("building"); 
+			String printer = in.getString("printer"); 
+			String filename = in.getString("filename");
+			boolean collate = in.getBoolean("collate");
+			boolean doubleSided = in.getBoolean("doublesided"); 
+			int copies = in.getInt("copies"); 
+			File file = (File) in.getSerializable("file");
+
+			this.file = file;
+			loadPrinter(building, printer); 
+			loadPrinterOptions(doubleSided, collate, copies); 
+			loadFilename(filename);
+		}
+	}
+
+	/**
+	 * Enables Print we have a file set. 
+	 */
+	private void enablePrintButton() {
+		if (havePrintableFile()) {
+			Button btn = (Button)  findViewById(R.id.btnPrint); 
+			if (!btn.isEnabled()) {
+				btn.setEnabled(true);
+			}
+		} else {
+			Log.d(TAG, "Not enabling Print Button because File is" +
+						" either null or non-exitent");
+		}
+	}
 	
 	private void onClickImageButtonMinus(ImageButton ib) {
 		EditText et = (EditText) findViewById(R.id.editTextCopies);
@@ -118,10 +226,7 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 			tv.setText(fname); 
 			
 			// Enable Print Button
-			Button btn = (Button)  findViewById(R.id.btnPrint); 
-			if (!btn.isEnabled()) {
-				btn.setEnabled(true);
-			}
+			enablePrintButton();
 		}
 	}
 	
@@ -216,12 +321,29 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		
 	}
 
-	private PrinterOptions currentPrinterOptions() {
+	private PrinterOptions getCurrentPrinterOptions() {
 		CheckBox doubleSided = (CheckBox) findViewById(R.id.checkBoxDoubleSided);
 		CheckBox collate = (CheckBox) findViewById(R.id.checkBoxCollate); 
 		EditText copies = (EditText) findViewById(R.id.editTextCopies);		
 		int numCopies = Integer.parseInt(copies.getText().toString());
 		return new PrinterOptions(doubleSided.isChecked(), collate.isChecked(), numCopies); 
+	}
+	
+	private String getSelectedPrinter() {
+		Spinner sPrinter = (Spinner) findViewById(R.id.spinnerPrinter); 
+		String printer  = (String) sPrinter.getSelectedItem();
+		return printer;
+	}
+	
+	private String getSelectedBuilding() {
+		Spinner sBuilding = (Spinner) findViewById(R.id.spinnerBuilding); 
+		String building = (String)  sBuilding.getSelectedItem(); 
+		return building; 
+	}
+	
+	private String getCurrentFilename() { 
+		TextView tv = (TextView) findViewById(R.id.textViewFilename);
+		return tv.getText().toString(); 
 	}
 	
 	private void onClickButtonPrint() {
@@ -234,13 +356,9 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		}
 		
 		// Get Selected Printer
-		Spinner sPrinter = (Spinner) findViewById(R.id.spinnerPrinter); 
-		String printer  = (String) sPrinter.getSelectedItem();
-		
-		Spinner sBuilding = (Spinner) findViewById(R.id.spinnerBuilding); 
-		String building = (String)  sBuilding.getSelectedItem(); 
-		
-		PrinterOptions options = currentPrinterOptions(); 
+		String printer = getSelectedPrinter(); 
+		String building = getSelectedBuilding(); 
+		PrinterOptions options = getCurrentPrinterOptions(); 
 		
 		// show progress dialog 
 		this.progressDialog.show(); 		
@@ -272,12 +390,7 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
-	public void test() {
-		boolean success = CUPrint.loadTestFile(this);
-		// sm("Load File was Successful? " + success);
-		//asyncHttpPrintTest();		
-		//sm("async done");
-		//loadPrinters();
+	public void test() {		
 		initBuildingSpinner();
 		initProgressDialog();
 	}

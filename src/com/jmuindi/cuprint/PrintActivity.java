@@ -59,9 +59,10 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);					
+		setContentView(R.layout.activity_print);
 		initBuildingSpinner();
 		initProgressDialog();		
-		setContentView(R.layout.activity_print);	
+			
 	}
 
 	@Override

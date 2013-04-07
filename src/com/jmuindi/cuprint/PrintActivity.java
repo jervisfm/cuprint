@@ -276,6 +276,7 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		//sm("async done");
 		//loadPrinters();
 		initBuildingSpinner();
+		initProgressDialog();
 	}
 	
 	
@@ -326,8 +327,7 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		iv.setImageResource(imageId);
 		
 		// update status message
-		Calendar cal = Calendar.getInstance();
-		String time = cal.toString();		
+		String time = Util.getCurrentTime(); 		
 		String msg = String.format("%s - %s", time, status);
 		tv.setText(msg);
 	}

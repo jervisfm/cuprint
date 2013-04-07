@@ -1,12 +1,20 @@
 package com.jmuindi.cuprint;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -16,6 +24,7 @@ public class PrintActivity extends Activity {
 
 	
 	public static final String TAG = "PrintActivity";
+	public HashMap<String, ArrayList<String>> printMap = null;
 	
 	public void d(String msg) {
 		Log.d(TAG,msg);
@@ -51,6 +60,58 @@ public class PrintActivity extends Activity {
 		String newValue = String.valueOf(current + 1); 
 		et.setText(newValue); 
 	}
+		
+	
+	private void initBuildingSpinner() {
+		
+		// Initialize the Print Map if Needed
+		if (printMap == null) {
+			printMap = Printers.getPrintersList(this);
+		}
+		
+		Spinner spinner = (Spinner) findViewById(R.id.spinnerBuilding);
+		ArrayList<String> buildings = new ArrayList<String>(20);
+		for (String building : printMap.keySet()) {
+			buildings.add(building);
+		}
+		
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+			android.R.layout.simple_spinner_item, buildings);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);
+
+		
+		
+		// Attach OnItem Selected Listener so that we update the printers Spinner 
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int pos, long id) {
+				String building = (String) parent.getItemAtPosition(pos);
+				updatePrinterSpinner(building);
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {				
+				// Do nothing
+			}			
+		});
+		
+		
+		
+	}
+	
+	private void updatePrinterSpinner(String building) {		
+		Spinner spinner = (Spinner) findViewById(R.id.spinnerPrinter);
+		ArrayList<String> printers = printMap.get(building);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, printers);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);		
+	}
+	
 	
 	public void onClick(View v) {
 		
@@ -78,7 +139,8 @@ public class PrintActivity extends Activity {
 		// sm("Load File was Successful? " + success);
 		//asyncHttpPrintTest();		
 		//sm("async done");
-		loadPrinters();
+		//loadPrinters();
+		initBuildingSpinner();
 	}
 	
 	

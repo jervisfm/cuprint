@@ -22,7 +22,7 @@ public class Util {
 	
 	public static String getCurrentTime() {
 		Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("h:m:s a");
+        SimpleDateFormat format = new SimpleDateFormat("h:m a");
         return format.format(calendar.getTime());
 	}
 }

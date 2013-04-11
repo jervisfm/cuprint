@@ -280,6 +280,14 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		}
 	}
 
+	private void disablePrintButton() {		
+		Button btn = (Button) findViewById(R.id.btnPrint);
+		if (btn.isEnabled()) {
+			btn.setEnabled(false);
+		}
+
+	}
+	
 	/**
 	 * Enables Print we have a file set. 
 	 */
@@ -514,6 +522,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 							sml("Cannot Print Files of Extension:'" + ext +"' "+									
 							    "Please choose a supported document type and " +
 							    "try again");
+							clearSelectedFile();
 						}
 					} catch (Exception e) {
 						Log.e("PrintActivity", "File select error", e);
@@ -595,6 +604,17 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		updateStatusBar(imageId, status);
 	}
 			
+	private void resetFilenameUIText() {		
+		TextView tv = (TextView) findViewById(R.id.textViewFilename);
+		String msg = "Select File to Print";
+		tv.setText(msg); 
+	}
+	
+	private void clearSelectedFile() {
+		this.file = null; 
+		disablePrintButton();
+		resetFilenameUIText(); 
+	}
 	
 	private void showStatusBar() {
 		// Enable the status message bar if needed

@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:orientation="vertical"
         android:weightSum="1.0" >
 
@@ -43,7 +43,7 @@
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_below="@+id/LinearLayout1"
-            android:layout_weight="0.78"
+            android:layout_weight="0.75"
             android:scrollbars="vertical" >
 
             <LinearLayout
@@ -177,7 +177,7 @@
             android:id="@+id/btnPrint"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.11"
+            android:layout_weight="0.14"
             android:enabled="false"
             android:onClick="onClick"
             android:text="Print" />

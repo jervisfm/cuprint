@@ -321,7 +321,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 			} else {
 				Log.e(TAG, "File name not available");
 			}
-			Log.e(TAG, "File name was finally set to " + fname);
+			Log.d(TAG, "File name was finally set to " + fname);
 			TextView tv = (TextView) findViewById(R.id.textViewFilename);
 			tv.setText(fname); 
 			

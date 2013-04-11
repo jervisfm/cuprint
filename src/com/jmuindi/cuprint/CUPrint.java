@@ -67,7 +67,7 @@ public class CUPrint {
 	 */
 	public static void print(String building, String printer, 
 							 PrinterOptions options, File f,
-							 final PrintActivity callback) {		
+							 final PrintCallBack callback) {		
 		AsyncHttpClient client = new AsyncHttpClient();				
 		RequestParams params = new RequestParams(); 
 		params.put("print[building]", building);

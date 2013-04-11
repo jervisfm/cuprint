@@ -35,7 +35,7 @@ import com.ipaulpro.afilechooser.utils.FileUtils;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-public class PrintActivity extends Activity  implements PrintCallBack{
+public class PrintActivity extends Activity  implements PrintCallBack {
 
 
 	// Request Code for On Activity Result 
@@ -70,7 +70,7 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 	    String type = intent.getType();
 	    
 	    
-	    if (Intent.ACTION_VIEW.equals(action)  && type != null) {
+	    if (Intent.ACTION_VIEW.equals(action) && type != null) {
 	    	// Handle Intent and get the data as a file. 
 	    	Uri uri = intent.getData();
 	    	try {
@@ -80,7 +80,7 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 				setFileToPrint(file, uri.getLastPathSegment());
 			} catch (Exception e) {
 				Log.e("PrintActivity", "File Loading error when " +
-										"prelading it from an intent", e);
+									   "preloading it from an intent", e);
 				sm("Autoloading Failed, Please Manually Select File to Print");
 			}
 	    } 
@@ -92,10 +92,9 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		
 	}
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {		
-		super.onSaveInstanceState(outState);
-		
+	
+	private Bundle getCurrentState() {
+		Bundle state = new Bundle(); 
 		String building = getSelectedBuilding(); 
 		String printer = getSelectedPrinter(); 
 		String filename = getCurrentFilename();
@@ -107,15 +106,24 @@ public class PrintActivity extends Activity  implements PrintCallBack{
 		boolean doubleSided = options.double_sided;
 		int copies = options.copies;
 		
-		outState.putString("building", building);
-		outState.putString("printer", printer);
-		outState.putBoolean("collate", collate);
-		outState.putBoolean("doublesided", doubleSided);
-		outState.putInt("copies", copies); 
-		outState.putString("filename", filename);
-		outState.putSerializable("file", this.file);
-		outState.putString("statusmessage", statusMessage);
-		outState.putBoolean("statusbarvisible", statusVisible);
+		state.putString("building", building);
+		state.putString("printer", printer);
+		state.putBoolean("collate", collate);
+		state.putBoolean("doublesided", doubleSided);
+		state.putInt("copies", copies); 
+		state.putString("filename", filename);
+		state.putSerializable("file", this.file);
+		state.putString("statusmessage", statusMessage);
+		state.putBoolean("statusbarvisible", statusVisible);
+		return state; 
+	}
+	
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {		
+		super.onSaveInstanceState(outState);
+		Bundle currentState = getCurrentState();
+		outState.putAll(currentState);
 	}
 	
 	private boolean isStatusBarVisible() {

@@ -37,14 +37,13 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class PrintActivity extends Activity  implements PrintCallBack {
-
 	// Request Code for On Activity Result 
 	private static final int ACTIVITY_REQUEST_CODE = 6387;	
 	public static final String TAG = "PrintActivity";
 	public static final String SUCCESS_STATUS = "Job Sent Successfully";
 	public static final String ERROR_STATUS = "Job Failed to be sent";
 	public static final String ACTIVITY_STATE = "PrintActivityState"; 
-	
+	private static final boolean DEBUG = false; 
 	private Dialog progressDialog = null;
 
 	public HashMap<String, ArrayList<String>> printMap = null;
@@ -52,8 +51,24 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	
 	
 	public void d(String msg) {
-		Log.d(TAG,msg);
+		if (DEBUG)
+			Log.d(TAG,msg);
 	}
+	
+	public void e(String msg) {
+		if (DEBUG)
+			Log.e(TAG, msg);
+	}
+	
+	public void v(String msg) {
+		if (DEBUG)
+			Log.v(TAG, msg);
+	}
+	public void w(String msg) {
+		if (DEBUG)
+			Log.w(TAG, msg);
+	}
+	
 	
 	/**
 	 * Show Short Toast Message. 
@@ -107,9 +122,9 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		ed.putString(ACTIVITY_STATE, stateData);		
 		boolean success = ed.commit(); 
 		if (!success) {
-			Log.e(TAG, "Failed to persist/save current activity state");
+			e("Failed to persist/save current activity state");
 		} else {
-			Log.v(TAG, "Saving current activity state completed successfully");
+			v("Saving current activity state completed successfully");
 		}
 	}
 			
@@ -144,11 +159,11 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	    	try {
 				// Create a file instance from the URI
 				File file = FileUtils.getFile(uri);	
-				Log.d(TAG,"Is Uri Null? " + String.valueOf(uri == null));
+				d("Is Uri Null? " + String.valueOf(uri == null));
 				setFileToPrint(file, uri.getLastPathSegment());
 			} catch (Exception e) {
-				Log.e("PrintActivity", "File Loading error when " +
-									   "preloading it from an intent", e);
+				e("File Loading error when " +
+				  "preloading it from an intent" + e);
 				sm("Autoloading Failed, Please Manually Select File to Print");
 			}
 	    }
@@ -158,12 +173,12 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		SharedPreferences sp = this.getPreferences(MODE_PRIVATE); 
 		String data = sp.getString(ACTIVITY_STATE, null);
 		if (data != null) {
-			Log.d(TAG, "About to Restore Activity State");
+			d("About to Restore Activity State");
 			Object obj = Util.getObjectFromBase64(data);
 			PrintActivityState activityState = (PrintActivityState) obj; 
 			loadSavedState(activityState);
 		} else {
-			Log.d(TAG, "Did not restore activity state");
+			d("Did not restore activity state");
 		}
 	}
 	
@@ -222,7 +237,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {		
 		super.onSaveInstanceState(outState);		
-		Log.d(TAG, "Attempting to persist current activity state ...");
+		d("Attempting to persist current activity state ...");
 		saveCurrentActivityState();
 	}
 	
@@ -269,7 +284,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		Spinner sBuilding = (Spinner) findViewById(R.id.spinnerBuilding);
 		
 		int buildingIndex = getBuildingIndex(building);
-		Log.v(TAG, "buidling Index == " + buildingIndex);
+		v("buidling Index == " + buildingIndex);
 		int printerIndex = getPrinterIndex(printer);
 		
 		sPrinter.setSelection(printerIndex); 
@@ -325,12 +340,12 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 			File file = pas.getFile(); 
 			String statusMessage = pas.getStatusmessage();
 			
-			Log.d(TAG, "building = " + building);
-			Log.d(TAG, "printer = " + printer);
-			Log.d(TAG, "filename = " + filename);
-			Log.d(TAG, "collate ?  " + collate);
-			Log.d(TAG, "doulbeseid= " + doubleSided);
-			Log.d(TAG, "copies = " + copies);
+			d("building = " + building);
+			d("printer = " + printer);
+			d("filename = " + filename);
+			d("collate ?  " + collate);
+			d("doulbeseid= " + doubleSided);
+			d("copies = " + copies);
 			
 			
 			this.file = file;
@@ -360,8 +375,8 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 				btn.setEnabled(true);
 			}
 		} else {
-			Log.d(TAG, "Not enabling Print Button because File is" +
-						" either null or non-exitent");
+			d("Not enabling Print Button because File is" +
+			  " either null or non-exitent");
 		}
 	}
 	
@@ -394,25 +409,25 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	
 	private void setFileToPrint(File f, String uriName) {
 		if (f == null) {
-			Log.w(TAG, "Setting null file to Print");
+			w("Setting null file to Print");
 		} else if (!f.exists()) {
-			Log.w(TAG, "Given non-existent file to Print - ignoring...");
+			w("Given non-existent file to Print - ignoring...");
 		} else {
-			Log.v(TAG, "Setting this file for print: " + f.getAbsolutePath());
+			v("Setting this file for print: " + f.getAbsolutePath());
 			this.file = f; 
 			
 			// Update selected file in UI 
 			String fname = "";
 			if (uriName.trim().length() > 0) {
 				fname = uriName;
-				Log.d(TAG, "Using URI Name: " + uriName);
+				d("Using URI Name: " + uriName);
 			} else if (f.getName().trim().length() > 0) {
-				Log.d(TAG, "Using FName: " + f.getName());
+				d("Using FName: " + f.getName());
 				fname = f.getName(); 
 			} else {
-				Log.e(TAG, "File name not available");
+				e("File name not available");
 			}
-			Log.d(TAG, "File name was finally set to " + fname);
+			d("File name was finally set to " + fname);
 			TextView tv = (TextView) findViewById(R.id.textViewFilename);
 			tv.setText(fname); 
 			
@@ -545,7 +560,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	private void onClickButtonPrint() {
 
 		if (!Util.isNetworkAvailable(this)) {
-			Log.e(TAG, "Cannot print because there is not active internet connection");
+			e("Cannot print because there is not active internet connection");
 			sm("An active Internet connection is required to print. Please ensure " +
 			   "you're connected to a netowrk and try again");
 			return; 
@@ -577,7 +592,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 						// Create a file instance from the URI
 						final File file = FileUtils.getFile(uri);
 						String ext = FileUtils.getExtension(uri.getPath());
-						Log.d(TAG, "**** File Extension == " + ext);
+						d("**** File Extension == " + ext);
 						if (Util.canPrintExtension(ext)) {
 							setFileToPrint(file, uri.getLastPathSegment());
 						} else { // Cannot Print File. 							
@@ -587,7 +602,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 							clearSelectedFile();
 						}
 					} catch (Exception e) {
-						Log.e("PrintActivity", "File select error", e);
+						e("File select error", e);
 					}
 				}
 			} 

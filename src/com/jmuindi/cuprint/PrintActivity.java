@@ -95,14 +95,6 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	}
 			
 	
-	/*
-	@Override
-	protected void onPause() {
-		super.onPause();
-		// Save the Activity State
-		saveCurrentActivityState(); 
-	} */
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);					

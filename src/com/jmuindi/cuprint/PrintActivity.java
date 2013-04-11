@@ -2,10 +2,9 @@ package com.jmuindi.cuprint;
 
 import java.io.File;
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -13,6 +12,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,12 +32,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class PrintActivity extends Activity  implements PrintCallBack {
-
 
 	// Request Code for On Activity Result 
 	private static final int ACTIVITY_REQUEST_CODE = 6387;	
@@ -55,6 +57,24 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	
 	public void sm(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+	}
+	
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		Gson gson = new Gson();  		
+		PrintActivityState state = getCurrentState();
+		String json = gson.toJson(state);
+		SharedPreferences sp = this.getPreferences(MODE_PRIVATE);
+		Editor ed = sp.edit();			
 	}
 	
 	@Override
@@ -84,46 +104,43 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 				sm("Autoloading Failed, Please Manually Select File to Print");
 			}
 	    } 
-		
-		// Restore prior state if present
-		if (savedInstanceState != null ) {
-			loadSavedState(savedInstanceState);
-		}
+				
+	    
+	    if (savedInstanceState != null) {
+	    	PrintActivityState pas = (PrintActivityState) savedInstanceState.getSerializable("printactivitystate");		    
+	    	loadSavedState(pas);		    
+	    }
+	    						
 		
 	}
 
 	
-	private Bundle getCurrentState() {
-		Bundle state = new Bundle(); 
+	private PrintActivityState getCurrentState() {
 		String building = getSelectedBuilding(); 
 		String printer = getSelectedPrinter(); 
 		String filename = getCurrentFilename();
 		String statusMessage= getCurrentStatusMsg();
 		PrinterOptions options = getCurrentPrinterOptions();
-		
 		boolean statusVisible = isStatusBarVisible(); 
-		boolean collate = options.collate; 
-		boolean doubleSided = options.double_sided;
-		int copies = options.copies;
 		
-		state.putString("building", building);
-		state.putString("printer", printer);
-		state.putBoolean("collate", collate);
-		state.putBoolean("doublesided", doubleSided);
-		state.putInt("copies", copies); 
-		state.putString("filename", filename);
-		state.putSerializable("file", this.file);
-		state.putString("statusmessage", statusMessage);
-		state.putBoolean("statusbarvisible", statusVisible);
-		return state; 
+		PrintActivityState pas = new PrintActivityState();		
+		pas.setBuilding(building);
+		pas.setPrinter(printer);
+		pas.setPrintOptions(options);
+		pas.setFilename(filename);
+		pas.setFile(this.file);
+		pas.setStatusmessage(statusMessage);
+		pas.setStatusbarvisible(statusVisible);
+		
+		return pas; 
 	}
 	
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {		
-		super.onSaveInstanceState(outState);
-		Bundle currentState = getCurrentState();
-		outState.putAll(currentState);
+		super.onSaveInstanceState(outState);		
+		PrintActivityState pas = getCurrentState();
+		outState.putSerializable("printactivitystate", pas);
 	}
 	
 	private boolean isStatusBarVisible() {
@@ -213,17 +230,17 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	
 	
 	
-	private void loadSavedState(Bundle in) {
-		if (in != null) {
-			String building = in.getString("building"); 
-			String printer = in.getString("printer"); 
-			String filename = in.getString("filename");
-			boolean collate = in.getBoolean("collate");
-			boolean doubleSided = in.getBoolean("doublesided"); 
-			boolean statusBarVisible = in.getBoolean("statusbarvisible");
-			int copies = in.getInt("copies"); 
-			File file = (File) in.getSerializable("file");
-			String statusMessage = (String) in.getString("statusmessage");
+	private void loadSavedState(PrintActivityState pas) {
+		if (pas != null) {
+			String building = pas.getBuilding(); 
+			String printer = pas.getPrinter();  
+			String filename = pas.getFilename();
+			boolean collate = pas.isCollate();
+			boolean doubleSided = pas.isDoubleSided(); 
+			boolean statusBarVisible = pas.isStatusbarvisible();
+			int copies = pas.getCopies(); 
+			File file = pas.getFile(); 
+			String statusMessage = pas.getStatusmessage();
 			
 			Log.d(TAG, "building = " + building);
 			Log.d(TAG, "printer = " + printer);

@@ -103,6 +103,10 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		// Restore Persisted Activity State 
 		restoreActivityState(); 
 		
+		if (savedInstanceState == null) { // This is a brand new Run.			
+			hideStatusBar(); 
+		}
+		
 		// Get intent, action and MIME type
 	    Intent intent = getIntent();
 	    String action = intent.getAction();
@@ -132,6 +136,8 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 			Object obj = Util.getObjectFromBase64(data);
 			PrintActivityState activityState = (PrintActivityState) obj; 
 			loadSavedState(activityState);
+		} else {
+			Log.d(TAG, "Did not restore activity state");
 		}
 	}
 	

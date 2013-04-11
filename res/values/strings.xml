@@ -4,5 +4,15 @@
     <string name="app_name">CU Print</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-
+    <string name="help_dialog_title">CU Print Help</string>
+    <string name="help_message">
+        CU Print is an app that lets you print to 
+        Printers at Columbia University.\n\n 
+        It uses the PrintAtCU service (http://www.printatcu.com) so 
+        you will find your document under the host "printatcu.com", a
+        random username and the given file name.\n\n
+        Print jobs usually take 30 seconds after being sent to appear
+        on the printer queue.\n\n
+        Data Collection Policy is per PrintAtCU\'s Privacy Policy. 
+        </string>
 </resources>

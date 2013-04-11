@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -16,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -139,6 +141,31 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		} else {
 			Log.d(TAG, "Did not restore activity state");
 		}
+	}
+	
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+		
+		int id = item.getItemId(); 
+		switch (id) {
+		case R.id.menuItemHelp: {
+			createHelpDialog().show();
+			return true;
+		}
+		default:{
+			return false;
+		}
+		}
+	}
+	private AlertDialog createHelpDialog() {		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.help_dialog_title);
+        builder.setMessage(R.string.help_message);        
+        builder.setPositiveButton(android.R.string.ok, null);         		
+        return builder.create();						
 	}
 	
 	

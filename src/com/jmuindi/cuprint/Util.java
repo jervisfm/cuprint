@@ -2,6 +2,7 @@ package com.jmuindi.cuprint;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,6 +10,8 @@ import java.io.OptionalDataException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import com.ipaulpro.afilechooser.utils.FileUtils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -80,5 +83,18 @@ public class Util {
 			e.printStackTrace();
 		}
 	    return null;
+	}
+	
+	public static boolean canPrintExtension(String ext) {
+		if (ext != null) {
+			String[] formats = CUPrint.SUPPORTED_FILE_FORMATS;
+			for(String f : formats) {
+				if(ext.trim().equalsIgnoreCase(f))
+					return true;
+			}
+			
+		} 
+		return false;
+		
 	}
 }

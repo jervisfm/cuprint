@@ -3,10 +3,7 @@ package com.jmuindi.cuprint;
 import java.io.Serializable;
 
 
-public class PrinterOptions implements Serializable{	
-	/**
-	 * 
-	 */
+public class PrinterOptions implements Serializable{		
 	private static final long serialVersionUID = 1L;
 	public boolean double_sided = false;
 	public boolean collate = false; 	

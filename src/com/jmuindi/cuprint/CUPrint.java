@@ -24,7 +24,9 @@ import com.loopj.android.http.RequestParams;
 public class CUPrint {
 
 	public static final String PRINT_API_URL = "https://printatcu.com/prints";
-	public static final String TAG = "CUPRINT"; 			
+	public static final String TAG = "CUPRINT";
+	public static final String[] SUPPORTED_FILE_FORMATS = {".pdf", ".eps", ".ps", ".odt", ".ods", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pages", ".ai", ".psd", ".tiff", ".dxf", ".svg"};
+	
 	public static String getFilePath(String filename) {
 		return "/data/data/com.jmuindi.cuprint/" + filename;
 	}

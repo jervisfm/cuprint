@@ -42,6 +42,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	public static final String SUCCESS_STATUS = "Job Sent Successfully";
 	public static final String ERROR_STATUS = "Job Failed to be sent";
 	public static final String ACTIVITY_STATE = "PrintActivityState"; 
+	
 	private Dialog progressDialog = null;
 
 	public HashMap<String, ArrayList<String>> printMap = null;
@@ -52,8 +53,20 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		Log.d(TAG,msg);
 	}
 	
+	/**
+	 * Show Short Toast Message. 
+	 * @param msg
+	 */
 	public void sm(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+	}
+
+	/**
+	 * Show Long Toast.
+	 * @param msg
+	 */
+	public void sml(String msg) {
+		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 	}
 	
 		
@@ -61,18 +74,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		Log.d(TAG, ">>>>>  onStart called");
-		// Restore the Activity State
-		// This would handle instances when user navigates to 
-		// another activity or the activity is killed by system. 		
-		SharedPreferences sp = this.getPreferences(MODE_PRIVATE); 
-		String data = sp.getString(ACTIVITY_STATE, null);
-		if (data != null) {
-			Log.d(TAG, "About to Load Data");
-			Object obj = Util.getObjectFromBase64(data);
-			PrintActivityState activityState = (PrintActivityState) obj; 
-			loadSavedState(activityState);
-		}
+		
 	}
 	
 	
@@ -98,6 +100,9 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		initBuildingSpinner();
 		initProgressDialog();		
 		
+		// Restore Persisted Activity State 
+		restoreActivityState(); 
+		
 		// Get intent, action and MIME type
 	    Intent intent = getIntent();
 	    String action = intent.getAction();
@@ -116,9 +121,20 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 									   "preloading it from an intent", e);
 				sm("Autoloading Failed, Please Manually Select File to Print");
 			}
-	    } 					    	    	    						
+	    }
 	}
 
+	private void restoreActivityState() {
+		SharedPreferences sp = this.getPreferences(MODE_PRIVATE); 
+		String data = sp.getString(ACTIVITY_STATE, null);
+		if (data != null) {
+			Log.d(TAG, "About to Restore Activity State");
+			Object obj = Util.getObjectFromBase64(data);
+			PrintActivityState activityState = (PrintActivityState) obj; 
+			loadSavedState(activityState);
+		}
+	}
+	
 	
 	private PrintActivityState getCurrentState() {
 		String building = getSelectedBuilding(); 
@@ -376,13 +392,15 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		// Initialize Printer Spinner. 
 		updatePrinterSpinner(buildings.get(0));
 	}
-	
+			
 	private void showFileBrowser() {
 		// Use the GET_CONTENT intent from the utility class
-		Intent target = FileUtils.createGetContentIntent();
+		Intent target = FileUtils.createGetContentIntent();				
 		// Create the chooser Intent
 		Intent intent = Intent.createChooser(
 				target, "Select File to Print");
+		
+		
 		try {
 			startActivityForResult(intent, ACTIVITY_REQUEST_CODE);
 		} catch (ActivityNotFoundException e) {
@@ -476,7 +494,8 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	}
 	
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, 
+									Intent data) {
 		switch (requestCode) {
 		case ACTIVITY_REQUEST_CODE:	
 			// If the file selection was successful
@@ -486,8 +505,16 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 					final Uri uri = data.getData();
 					try {
 						// Create a file instance from the URI
-						final File file = FileUtils.getFile(uri);						
-						setFileToPrint(file, uri.getLastPathSegment());						
+						final File file = FileUtils.getFile(uri);
+						String ext = FileUtils.getExtension(uri.getPath());
+						Log.d(TAG, "**** File Extension == " + ext);
+						if (Util.canPrintExtension(ext)) {
+							setFileToPrint(file, uri.getLastPathSegment());
+						} else { // Cannot Print File. 							
+							sml("Cannot Print Files of Extension:'" + ext +"' "+									
+							    "Please choose a supported document type and " +
+							    "try again");
+						}
 					} catch (Exception e) {
 						Log.e("PrintActivity", "File select error", e);
 					}

@@ -79,6 +79,25 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		
 	}
 	
+	private boolean isFirstRun() {
+		SharedPreferences sp = this.getPreferences(MODE_PRIVATE); 		
+		boolean doneFirstRun = sp.getBoolean("firstruncompleted", false);
+		if (doneFirstRun) {
+			return false;
+		} else {
+			return true;
+		}		
+	}
+	
+	private void doFirstRun() {		
+		showHelpDialog();  
+		SharedPreferences sp = this.getPreferences(MODE_PRIVATE); 
+		Editor ed = sp.edit();
+		ed.putBoolean("firstruncompleted", true);
+		ed.commit(); 
+	}
+	
+	
 	
 	private void saveCurrentActivityState() {
 		PrintActivityState activityState = getCurrentState();
@@ -107,6 +126,11 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		
 		if (savedInstanceState == null) { // This is a brand new Run.			
 			hideStatusBar(); 
+		}
+		
+		// Show Help First on First Run. 
+		if (isFirstRun()) {
+			doFirstRun(); 
 		}
 		
 		// Get intent, action and MIME type
@@ -160,6 +184,11 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		}
 		}
 	}
+	
+	private void showHelpDialog() {
+		createHelpDialog().show();
+	}
+	
 	private AlertDialog createHelpDialog() {		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.help_dialog_title);

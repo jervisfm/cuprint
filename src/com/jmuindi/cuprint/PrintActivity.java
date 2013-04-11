@@ -45,6 +45,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	public static final String TAG = "PrintActivity";
 	public static final String SUCCESS_STATUS = "Job Sent Successfully";
 	public static final String ERROR_STATUS = "Job Failed to be sent";
+	public static final String ACTIVITY_STATE = "PrintActivityState"; 
 	private Dialog progressDialog = null;
 
 	public HashMap<String, ArrayList<String>> printMap = null;
@@ -59,23 +60,48 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 	}
 	
-	
+		
 	@Override
-	protected void onResume() {
+	protected void onStart() {
 		// TODO Auto-generated method stub
-		super.onResume();
+		super.onStart();
+		Log.d(TAG, ">>>>>  onStart called");
+		// Restore the Activity State
+		// This would handle instances when user navigates to 
+		// another activity or the activity is killed by system. 		
+		SharedPreferences sp = this.getPreferences(MODE_PRIVATE); 
+		String data = sp.getString(ACTIVITY_STATE, null);
+		if (data != null) {
+			Log.d(TAG, "About to Load Data");
+			Object obj = Util.getObjectFromBase64(data);
+			PrintActivityState activityState = (PrintActivityState) obj; 
+			loadSavedState(activityState);
+		}
 	}
 	
+	
+	private void saveCurrentActivityState() {
+		PrintActivityState activityState = getCurrentState();
+		String stateData = Util.saveObjectToBase64(activityState);
+		SharedPreferences sp = this.getPreferences(MODE_PRIVATE);
+		Editor ed = sp.edit();		
+		ed.putString(ACTIVITY_STATE, stateData);		
+		boolean success = ed.commit(); 
+		if (!success) {
+			Log.e(TAG, "Failed to persist/save current activity state");
+		} else {
+			Log.v(TAG, "Saving current activity state completed successfully");
+		}
+	}
+			
+	
+	/*
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
-		Gson gson = new Gson();  		
-		PrintActivityState state = getCurrentState();
-		String json = gson.toJson(state);
-		SharedPreferences sp = this.getPreferences(MODE_PRIVATE);
-		Editor ed = sp.edit();			
-	}
+		// Save the Activity State
+		saveCurrentActivityState(); 
+	} */
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +113,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		// Get intent, action and MIME type
 	    Intent intent = getIntent();
 	    String action = intent.getAction();
-	    String type = intent.getType();
-	    
+	    String type = intent.getType();	    
 	    
 	    if (Intent.ACTION_VIEW.equals(action) && type != null) {
 	    	// Handle Intent and get the data as a file. 
@@ -103,15 +128,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 									   "preloading it from an intent", e);
 				sm("Autoloading Failed, Please Manually Select File to Print");
 			}
-	    } 
-				
-	    
-	    if (savedInstanceState != null) {
-	    	PrintActivityState pas = (PrintActivityState) savedInstanceState.getSerializable("printactivitystate");		    
-	    	loadSavedState(pas);		    
-	    }
-	    						
-		
+	    } 					    	    	    						
 	}
 
 	
@@ -139,8 +156,8 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {		
 		super.onSaveInstanceState(outState);		
-		PrintActivityState pas = getCurrentState();
-		outState.putSerializable("printactivitystate", pas);
+		Log.d(TAG, "Attempting to persist current activity state ...");
+		saveCurrentActivityState();
 	}
 	
 	private boolean isStatusBarVisible() {

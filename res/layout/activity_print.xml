@@ -42,7 +42,6 @@
             android:id="@+id/ScrollView01"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_below="@+id/LinearLayout1"
             android:layout_weight="0.75"
             android:scrollbars="vertical" >
 
@@ -50,7 +49,6 @@
                 android:id="@+id/linearLayout1"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
@@ -158,7 +156,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
                         android:onClick="onClick"
-                        android:src="@drawable/minus" />
+                        android:src="@drawable/minus" 
+                        android:contentDescription="Decrement Copy Count"/>
 
                     <ImageButton
                         android:id="@+id/ImageButtonPlus"
@@ -166,7 +165,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
                         android:src="@drawable/plus" 
-                        android:onClick="onClick"/>
+                        android:onClick="onClick"
+                        android:contentDescription="Increment Copy Count"/>
 
                 </LinearLayout>
 

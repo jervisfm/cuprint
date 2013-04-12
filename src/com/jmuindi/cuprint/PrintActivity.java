@@ -286,9 +286,9 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		int buildingIndex = getBuildingIndex(building);
 		v("buidling Index == " + buildingIndex);
 		int printerIndex = getPrinterIndex(printer);
-		
-		sPrinter.setSelection(printerIndex); 
+				 
 		sBuilding.setSelection(buildingIndex);
+		sPrinter.setSelection(printerIndex);
 	}
 	
 	private void loadPrinterOptions(boolean doubleSided, boolean collate, 

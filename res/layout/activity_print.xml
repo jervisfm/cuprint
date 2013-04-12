@@ -12,9 +12,10 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:weightSum="1.0" >
+        android:weightSum="1.0"
+        tools:ignore="UselessParent" >
 
-        <LinearLayout
+        <LinearLayout 
             android:id="@+id/LinearLayoutStatusBar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -25,17 +26,20 @@
                 android:id="@+id/imageViewStatusIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/failure_checkmark" />
+                android:src="@drawable/failure_checkmark" 
+                android:contentDescription="@string/failure_success_checkmark"/>
 
             <TextView
                 android:id="@+id/TextViewStatusMsg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:paddingLeft="5dp"
+                android:ellipsize="marquee"
                 android:lines="1"
-                android:ellipsize="marquee"                
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:paddingLeft="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                tools:ignore="SelectableText" />
+
         </LinearLayout>
 
         <ScrollView
@@ -48,7 +52,7 @@
             <LinearLayout
                 android:id="@+id/linearLayout1"
                 android:layout_width="fill_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
@@ -66,7 +70,7 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:layout_weight="0.70"
-                        android:text="Select File to Print"
+                        android:text="@string/select_file_to_print"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <Button
@@ -75,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.30"                        
                         android:onClick="onClick"
-                        android:text="Browse" />
+                        android:text="@string/browse" />
                 </LinearLayout>
 
                 <TextView
@@ -83,7 +87,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/activity_vertical_margin"
-                    android:text="Building"
+                    android:text="@string/building"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/BlueLight"
                     android:textStyle="bold" />
@@ -99,7 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/activity_vertical_margin"
-                    android:text="Printer"
+                    android:text="@string/printer"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/BlueLight"
                     android:textStyle="bold" />
@@ -114,13 +118,13 @@
                     android:id="@+id/checkBoxDoubleSided"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Print Double Sided" />
+                    android:text="@string/print_double_sided" />
 
                 <CheckBox
                     android:id="@+id/checkBoxCollate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Collate Pages" />
+                    android:text="@string/collate_pages" />
 
                 <LinearLayout
                     android:id="@+id/LinearLayout1"
@@ -133,7 +137,7 @@
                         android:id="@+id/textViewCopies"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"                       
-                        android:text="Number of Copies"
+                        android:text="@string/number_of_copies"
                         android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <EditText
@@ -147,7 +151,7 @@
         				android:cursorVisible="false" 
         				android:focusable="false" 
         				android:focusableInTouchMode="false"
-        				android:text="1" >                        
+        				android:text="@string/_1" >                        
                     </EditText>
 
                     <ImageButton
@@ -157,7 +161,7 @@
                         android:layout_weight="0.1"
                         android:onClick="onClick"
                         android:src="@drawable/minus" 
-                        android:contentDescription="Decrement Copy Count"/>
+                        android:contentDescription="@string/decrement_copy_count"/>
 
                     <ImageButton
                         android:id="@+id/ImageButtonPlus"
@@ -166,7 +170,7 @@
                         android:layout_weight="0.1"
                         android:src="@drawable/plus" 
                         android:onClick="onClick"
-                        android:contentDescription="Increment Copy Count"/>
+                        android:contentDescription="@string/increment_copy_count"/>
 
                 </LinearLayout>
 
@@ -180,7 +184,7 @@
             android:layout_weight="0.14"
             android:enabled="false"
             android:onClick="onClick"
-            android:text="Print" />
+            android:text="@string/print" />
     </LinearLayout>
 
 </RelativeLayout>

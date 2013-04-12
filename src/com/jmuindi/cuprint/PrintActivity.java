@@ -602,7 +602,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 							clearSelectedFile();
 						}
 					} catch (Exception e) {
-						e("File select error", e);
+						e("File select error: " + e);
 					}
 				}
 			} 

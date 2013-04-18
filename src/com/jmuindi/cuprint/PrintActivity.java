@@ -43,7 +43,9 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	public static final String SUCCESS_STATUS = "Job Sent Successfully";
 	public static final String ERROR_STATUS = "Job Failed to be sent";
 	public static final String ACTIVITY_STATE = "PrintActivityState"; 
-	private static final boolean DEBUG = false; 
+	private static final boolean DEBUG = true;
+	/* Index of the currently selected printer */
+	private int currentPrinter = 0; 
 	private Dialog progressDialog = null;
 
 	public HashMap<String, ArrayList<String>> printMap = null;
@@ -279,15 +281,26 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	
 	private void loadPrinter(String building, String printer) {
 		
+		
 		Spinner sPrinter = (Spinner) findViewById(R.id.spinnerPrinter); 
 		Spinner sBuilding = (Spinner) findViewById(R.id.spinnerBuilding);
 		
 		int buildingIndex = getBuildingIndex(building);
-		v("buidling Index == " + buildingIndex);
-		int printerIndex = getPrinterIndex(printer);
-				 
+		v("building Index == " + buildingIndex + " | " + building);						 
 		sBuilding.setSelection(buildingIndex);
+
+		// Update the Printer Spinner so that we we'll use
+		// the correct printer list in finding printer index. 
+		updatePrinterSpinner(building, 0);
+		
+		int printerIndex = getPrinterIndex(printer);
+		v("Printer Index == " + printerIndex + " | " + printer);		
 		sPrinter.setSelection(printerIndex);
+		this.currentPrinter = printerIndex; 
+		
+		
+		
+		
 	}
 	
 	private void loadPrinterOptions(boolean doubleSided, boolean collate, 
@@ -343,7 +356,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 			d("printer = " + printer);
 			d("filename = " + filename);
 			d("collate ?  " + collate);
-			d("doulbeseid= " + doubleSided);
+			d("doublesided= " + doubleSided);
 			d("copies = " + copies);
 			
 			
@@ -463,7 +476,8 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int pos, long id) {
 				String building = (String) parent.getItemAtPosition(pos);
-				updatePrinterSpinner(building);
+				updatePrinterSpinner(building, currentPrinter);
+				v("OnItemSelected Called");
 				
 			}
 
@@ -474,7 +488,7 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		});
 		
 		// Initialize Printer Spinner. 
-		updatePrinterSpinner(buildings.get(0));
+		updatePrinterSpinner(buildings.get(0), 0);
 	}
 			
 	private void showFileBrowser() {
@@ -492,13 +506,14 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		}				
 	}
 	
-	private void updatePrinterSpinner(String building) {		
+	private void updatePrinterSpinner(String building, int printerIndex) {		
 		Spinner spinner = (Spinner) findViewById(R.id.spinnerPrinter);
 		ArrayList<String> printers = printMap.get(building);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, printers);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinner.setAdapter(adapter);		
+		spinner.setAdapter(adapter);
+		spinner.setSelection(printerIndex);
 	}
 	
 	

@@ -26,6 +26,7 @@
                 android:id="@+id/imageViewStatusIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:src="@drawable/failure_checkmark" 
                 android:contentDescription="@string/failure_success_checkmark"/>
 

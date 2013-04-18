@@ -49,7 +49,6 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	public HashMap<String, ArrayList<String>> printMap = null;
 	public File file = null; 
 	
-	
 	public void d(String msg) {
 		if (DEBUG)
 			Log.d(TAG,msg);

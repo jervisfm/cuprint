@@ -44,8 +44,10 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 	public static final String ERROR_STATUS = "Job Failed to be sent";
 	public static final String ACTIVITY_STATE = "PrintActivityState"; 
 	private static final boolean DEBUG = true;
-	/* Index of the currently selected printer */
-	private int currentPrinter = 0; 
+	
+	/* Building of currently selected printer. Used to determine if 
+	 * printer spinner needs be updated */
+	private int currentBuilding = 0; 
 	private Dialog progressDialog = null;
 
 	public HashMap<String, ArrayList<String>> printMap = null;
@@ -129,16 +131,23 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		}
 	}
 			
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);					
-		setContentView(R.layout.activity_print);
+	private void init() {
 		initBuildingSpinner();
 		initProgressDialog();		
 		
 		// Restore Persisted Activity State 
 		restoreActivityState(); 
+		
+		 
+	}
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);					
+		setContentView(R.layout.activity_print);
+		
+		init(); 
+		
 		
 		if (savedInstanceState == null) { // This is a brand new Run.			
 			hideStatusBar(); 
@@ -296,7 +305,10 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		int printerIndex = getPrinterIndex(printer);
 		v("Printer Index == " + printerIndex + " | " + printer);		
 		sPrinter.setSelection(printerIndex);
-		this.currentPrinter = printerIndex; 
+		this.currentBuilding = buildingIndex;
+		//this.restoreRun = true;
+		//sBuilding.setSelection(buildingIndex);
+		updatePrinterSpinner(building, printerIndex);
 		
 		
 		
@@ -448,6 +460,34 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 		}
 	}
 	
+	private void setBuildingSpinnerOnItemListener() {
+		Spinner spinner = (Spinner) findViewById(R.id.spinnerBuilding);
+		OnItemSelectedListener l = getBuildingSpinnerSelectedItemListener(); 
+		spinner.setOnItemSelectedListener(l); 
+	}
+	
+	private OnItemSelectedListener getBuildingSpinnerSelectedItemListener() {
+		// Attach OnItem Selected Listener so that we update the printers Spinner 
+		return new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int pos, long id) {
+				String building = (String) parent.getItemAtPosition(pos);
+				if (pos != currentBuilding) {
+					updatePrinterSpinner(building, 0);
+					currentBuilding = pos;
+				}
+				v(" OnItemSelected Called");
+				
+			}
+	
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {				
+				// Do nothing
+			}			
+		};
+	}
 	private void initBuildingSpinner() {
 		
 		// Initialize the Print Map if Needed
@@ -466,26 +506,10 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 			android.R.layout.simple_spinner_item, buildings);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
-
 		
-		
-		// Attach OnItem Selected Listener so that we update the printers Spinner 
-		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int pos, long id) {
-				String building = (String) parent.getItemAtPosition(pos);
-				updatePrinterSpinner(building, currentPrinter);
-				v("OnItemSelected Called");
-				
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {				
-				// Do nothing
-			}			
-		});
+		// Set a listener to update printer list when a new building
+		// is selected. 
+		setBuildingSpinnerOnItemListener();
 		
 		// Initialize Printer Spinner. 
 		updatePrinterSpinner(buildings.get(0), 0);
@@ -513,7 +537,9 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 				android.R.layout.simple_spinner_item, printers);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
-		spinner.setSelection(printerIndex);
+		
+		v("Printer Spinner Size == " + spinner.getCount() + " | idx = " + printerIndex);
+		spinner.setSelection(printerIndex);		
 	}
 	
 	

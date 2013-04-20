@@ -601,8 +601,8 @@ public class PrintActivity extends Activity  implements PrintCallBack {
 
 		if (!Util.isNetworkAvailable(this)) {
 			e("Cannot print because there is not active internet connection");
-			sm("An active Internet connection is required to print. Please ensure " +
-			   "you're connected to a netowrk and try again");
+			sml("An active Internet connection is required to print. Please ensure " +
+			   "you're connected to a network and try again");
 			return; 
 		}
 		
